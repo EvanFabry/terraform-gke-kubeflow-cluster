@@ -109,24 +109,24 @@ variable "gpu_node_pool_name" {
 variable "highmem_node_pool_name" {
 }
 
-variable upstream_nameservers {
+variable "upstream_nameservers" {
   description = "List of upstream DNS resolvers (IP addresses) to set in kube-dns ConfigMap as upstreamResolvers, max of 3"
 }
 
-variable istio_enabled {
+variable "istio_enabled" {
   description = "Boolean, if Istio is enabled (in Kubeflow versions 0.6 and greater)"
   default     = false
 }
 
-variable network_policy_enabled {
+variable "network_policy_enabled" {
   description = "Boolean, to enable Network Policy or not"
   default     = true
 }
 
-variable mysql_developer_password {
+variable "mysql_developer_password" {
   description = "CloudSQL MySQL instance developer user password"
 }
 
-variable mysql_read_only_user_password {
+variable "mysql_read_only_user_password" {
   description = "CloudSQL MySQL instance read only user password"
 }
