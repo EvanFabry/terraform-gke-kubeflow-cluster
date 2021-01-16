@@ -17,7 +17,7 @@ resource "kubernetes_namespace" "istio-system" {
 
 # Create a Kubernetes secret for the cloudsql-proxy's credentials
 resource "kubernetes_secret" "cloudsql-instance-credentials" {
-  depends_on = ["kubernetes_namespace.kubeflow"]
+  depends_on = [kubernetes_namespace.kubeflow]
 
   metadata {
     namespace = "kubeflow"
@@ -25,7 +25,7 @@ resource "kubernetes_secret" "cloudsql-instance-credentials" {
   }
 
   data = {
-    "credentials.json" = "${base64decode(google_service_account_key.cloudsql_proxy_key.private_key)}"
+    "credentials.json" = "base64decode(google_service_account_key.cloudsql_proxy_key.private_key)"
   }
 }
 
@@ -34,7 +34,7 @@ resource "kubernetes_secret" "cloudsql-instance-credentials" {
 # expect to use/mount in order to talk to GCP resources in their pipeline
 # steps.
 resource "kubernetes_secret" "user-gcp-sa" {
-  depends_on = ["kubernetes_namespace.kubeflow"]
+  depends_on = [kubernetes_namespace.kubeflow]
 
   metadata {
     namespace = "kubeflow"
@@ -42,13 +42,13 @@ resource "kubernetes_secret" "user-gcp-sa" {
   }
 
   data = {
-    "user-gcp-sa.json" = "${base64decode(google_service_account_key.kubeflow_user_key.private_key)}"
+    "user-gcp-sa.json" = "base64decode(google_service_account_key.kubeflow_user_key.private_key)"
   }
 }
 
 # Create the admin-gcp-sa secret too
 resource "kubernetes_secret" "admin-gcp-sa" {
-  depends_on = ["kubernetes_namespace.kubeflow"]
+  depends_on = [kubernetes_namespace.kubeflow]
 
   metadata {
     namespace = "kubeflow"
@@ -56,14 +56,14 @@ resource "kubernetes_secret" "admin-gcp-sa" {
   }
 
   data = {
-    "admin-gcp-sa.json" = "${base64decode(google_service_account_key.kubeflow_admin_key.private_key)}"
+    "admin-gcp-sa.json" = "base64decode(google_service_account_key.kubeflow_admin_key.private_key)"
   }
 }
 
 resource "kubernetes_secret" "istio_admin-gcp-sa" {
   count = var.istio_enabled ? 1 : 0
 
-  depends_on = ["kubernetes_namespace.istio-system"]
+  depends_on = [kubernetes_namespace.istio-system]
 
   metadata {
     namespace = "istio-system"
@@ -71,6 +71,6 @@ resource "kubernetes_secret" "istio_admin-gcp-sa" {
   }
 
   data = {
-    "admin-gcp-sa.json" = "${base64decode(google_service_account_key.kubeflow_admin_key.private_key)}"
+    "admin-gcp-sa.json" = "base64decode(google_service_account_key.kubeflow_admin_key.private_key)"
   }
 }

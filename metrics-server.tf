@@ -6,12 +6,12 @@
  *****************************************/
 resource "null_resource" "delete_metrics_server_config_configmap" {
   provisioner "local-exec" {
-    command = "${path.module}/scripts/kubectl_wrapper.sh https://${local.cluster_endpoint} ${data.google_client_config.default.access_token} ${local.cluster_ca_certificate} ${path.module}/scripts/delete-default-resource.sh kube-system configmap metrics-server-config"
+    command = "path.module}/scripts/kubectl_wrapper.sh https://${local.cluster_endpoint} ${data.google_client_config.default.access_token} ${local.cluster_ca_certificate} ${path.module}/scripts/delete-default-resource.sh kube-system configmap metrics-server-config"
   }
 
   depends_on = [
-    "data.google_client_config.default",
-    "google_container_cluster.kubeflow_cluster",
+    data.google_client_config.default,
+    google_container_cluster.kubeflow_cluster,
   ]
 }
 
@@ -36,7 +36,7 @@ EOF
   ) }
 
   depends_on = [
-    "null_resource.delete_metrics_server_config_configmap",
-    "google_container_cluster.kubeflow_cluster",
+    null_resource.delete_metrics_server_config_configmap,
+    google_container_cluster.kubeflow_cluster,
   ]
 }

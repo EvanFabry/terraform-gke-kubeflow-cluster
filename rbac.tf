@@ -1,5 +1,5 @@
 resource "kubernetes_role" "kfp_sdk_user_role" {
-  depends_on = ["kubernetes_namespace.kubeflow"]
+  depends_on = [kubernetes_namespace.kubeflow]
 
   metadata {
     name      = "kfp-sdk-user"
@@ -17,7 +17,7 @@ resource "kubernetes_role" "kfp_sdk_user_role" {
 }
 
 resource "kubernetes_role_binding" "kfp_sdk_user_rolebinding" {
-  depends_on = ["kubernetes_role.kfp_sdk_user_role"]
+  depends_on = [kubernetes_role.kfp_sdk_user_role]
 
   metadata {
     name      = "kfp-sdk-user"
