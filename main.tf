@@ -174,7 +174,7 @@ resource "google_container_node_pool" "gpu_pool" {
     machine_type = "${var.gpu_node_pool_machine_type}"
 
     guest_accelerator {
-      type  = "nvidia-tesla-k80"
+      type  = "${var.gpu_type}"
       count = 1
     }
 

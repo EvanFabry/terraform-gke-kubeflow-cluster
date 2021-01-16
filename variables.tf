@@ -83,6 +83,10 @@ variable "gpu_node_pool_machine_type" {
   default = "n1-standard-8"
 }
 
+variable "gpu_type" {
+  default = "nvidia-tesla-v100"
+}
+
 variable "highmem_node_pool_machine_type" {
   default = "n2-highmem-16"
 }

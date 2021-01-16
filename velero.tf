@@ -22,9 +22,9 @@ resource "google_storage_bucket" "backup_bucket" {
   location = "EU"
 
   # don't destroy buckets containing backup data if re-creating a cluster
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "google_service_account" "velero" {
@@ -46,9 +46,9 @@ resource "google_storage_bucket_iam_binding" "ark_bucket_iam" {
   ]
 
   # don't destroy buckets containing backup data if re-creating a cluster
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "kubernetes_namespace" "velero" {
