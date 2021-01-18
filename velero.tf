@@ -15,45 +15,35 @@ locals {
 
 # Create a unique GCS bucket per cluster
 resource "google_storage_bucket" "backup_bucket" {
-  name = "var.project}_${var.cluster_region}_${var.cluster_name}_backup"
+  name = format("%s_%s_%s_backup", var.project, var.cluster_region, var.cluster_name)
 
   bucket_policy_only = true
 
   location = "EU"
-
-  # don't destroy buckets containing backup data if re-creating a cluster
-  # lifecycle {
-  #   prevent_destroy = true
-  # }
 }
 
 resource "google_service_account" "velero" {
-  project      = "var.project"
-  account_id   = "var.cluster_name-velero"
-  display_name = "Velero account for var.cluster_name"
+  project      = var.project
+  account_id   = format("%s-velero", var.cluster_name)
+  display_name = format("Velero account for %s", var.cluster_name)
 }
 
 resource "google_service_account_key" "velero" {
-  service_account_id = "google_service_account.velero.name"
+  service_account_id = google_service_account.velero.name
 }
 
 resource "google_storage_bucket_iam_binding" "ark_bucket_iam" {
-  bucket = "google_storage_bucket.backup_bucket.name"
+  bucket = google_storage_bucket.backup_bucket.name
   role   = "roles/storage.objectAdmin"
 
   members = [
-    "serviceAccount:google_service_account.velero.email"
+    format("serviceAccount:%s", google_service_account.velero.email)
   ]
-
-  # don't destroy buckets containing backup data if re-creating a cluster
-  # lifecycle {
-  #   prevent_destroy = true
-  # }
 }
 
 resource "kubernetes_namespace" "velero" {
   metadata {
-    name = "local.namespace"
+    name = local.namespace
     labels = {
       "component" = "velero"
     }
@@ -64,7 +54,7 @@ resource "kubernetes_secret" "service_account_key" {
   depends_on = [kubernetes_namespace.velero]
 
   metadata {
-    namespace = "local.namespace"
+    namespace = local.namespace
     name      = "cloud-credentials"
     labels = {
       "component" = "velero"
@@ -72,6 +62,6 @@ resource "kubernetes_secret" "service_account_key" {
   }
 
   data = {
-    "cloud" = "base64decode(google_service_account_key.velero.private_key)"
+    "cloud" = base64decode(google_service_account_key.velero.private_key)
   }
 }
