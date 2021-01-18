@@ -6,7 +6,14 @@
  *****************************************/
 resource "null_resource" "delete_default_kube_dns_configmap" {
   provisioner "local-exec" {
-    command = "path.module}/scripts/kubectl_wrapper.sh https://${local.cluster_endpoint} ${data.google_client_config.default.access_token} ${local.cluster_ca_certificate} ${path.module}/scripts/delete-default-resource.sh kube-system configmap kube-dns"
+    command = format(
+      "%s/scripts/kubectl_wrapper.sh https://%s %s %s %s/scripts/delete-default-resource.sh kube-system configmap kube-dns",
+      path.module,
+      local.cluster_endpoint,
+      data.google_client_config.default.access_token,
+      local.cluster_ca_certificate,
+      path.module,
+    )
   }
 
   depends_on = [
@@ -26,7 +33,7 @@ resource "kubernetes_config_map" "kube-dns" {
 
   data = {
     upstreamNameservers = <<EOF
-${jsonencode(var.upstream_nameservers)}
+jsonencode(var.upstream_nameservers)
 EOF
   }
 

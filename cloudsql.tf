@@ -6,10 +6,10 @@ resource "random_id" "db_name_suffix" {
 
 # A Cloud SQL instance to used for the metadata of pipelines.
 resource "google_sql_database_instance" "metadata_db_instance" {
-  project          = "var.project"
-  name             = "var.cluster_name-random_id.db_name_suffix.hex"
+  project          = var.project
+  name             = format("%s-%s", var.cluster_name, random_id.db_name_suffix.hex)
   database_version = "MYSQL_5_7"
-  region           = "var.cluster_region"
+  region           = var.cluster_region
 
   settings {
     backup_configuration {
@@ -22,14 +22,14 @@ resource "google_sql_database_instance" "metadata_db_instance" {
 
     user_labels = {
       "application"              = "kubeflow"
-      "env"                      = "var.env_label"
-      "cloudsql-instance-suffix" = "random_id.db_name_suffix.hex"
+      "env"                      = var.env_label
+      "cloudsql-instance-suffix" = random_id.db_name_suffix.hex
     }
 
     tier = "db-n1-standard-4"
 
     location_preference {
-      zone = "var.cluster_zone"
+      zone = var.cluster_zone
     }
   }
 }
@@ -38,21 +38,21 @@ resource "google_sql_database_instance" "metadata_db_instance" {
 # creates (as a best practice?), so recreate it here
 resource "google_sql_user" "root_user" {
   name     = "root"
-  instance = "google_sql_database_instance.metadata_db_instance.name"
+  instance = google_sql_database_instance.metadata_db_instance.name
   password = ""
   host     = "%"
 }
 
 resource "google_sql_user" "read_only_user" {
   name     = "read_only"
-  instance = "google_sql_database_instance.metadata_db_instance.name"
-  password = "var.mysql_read_only_user_password"
+  instance = google_sql_database_instance.metadata_db_instance.name
+  password = var.mysql_read_only_user_password
   host     = "%"
 }
 
 resource "google_sql_user" "developer" {
   name     = "developer"
-  instance = "google_sql_database_instance.metadata_db_instance.name"
-  password = "var.mysql_developer_password"
+  instance = google_sql_database_instance.metadata_db_instance.name
+  password = var.mysql_developer_password
   host     = "%"
 }
