@@ -50,6 +50,12 @@ variable "services_secondary_range_name" {
   default = ""
 }
 
+variable "disable_googleapi_services_on_destroy" {
+  description = "Whether to disable googleapi services when project is destroyed. https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service#disable_on_destroy"
+  # default to not disable services
+  default = "false"
+}
+
 variable "initial_node_count" {
   default = 3
 }
