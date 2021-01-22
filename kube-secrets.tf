@@ -1,4 +1,10 @@
 resource "kubernetes_namespace" "kubeflow" {
+  depends_on = [
+    google_container_node_pool.gpu_pool,
+    google_container_node_pool.highmem_pool,
+    google_container_node_pool.main_pool,
+  ]
+
   metadata {
     name = "kubeflow"
   }
@@ -9,6 +15,11 @@ resource "kubernetes_namespace" "kubeflow" {
 }
 
 resource "kubernetes_namespace" "istio-system" {
+  depends_on = [
+    google_container_node_pool.gpu_pool,
+    google_container_node_pool.highmem_pool,
+    google_container_node_pool.main_pool,
+  ]
   count = var.istio_enabled ? 1 : 0
 
   metadata {
