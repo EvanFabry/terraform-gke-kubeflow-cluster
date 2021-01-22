@@ -42,6 +42,11 @@ resource "google_storage_bucket_iam_binding" "ark_bucket_iam" {
 }
 
 resource "kubernetes_namespace" "velero" {
+  depends_on = [
+    google_container_node_pool.gpu_pool,
+    google_container_node_pool.highmem_pool,
+    google_container_node_pool.main_pool,
+  ]
   metadata {
     name = local.namespace
     labels = {
