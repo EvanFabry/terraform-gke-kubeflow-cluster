@@ -17,7 +17,7 @@ locals {
 resource "google_storage_bucket" "backup_bucket" {
   name = format("%s_%s_%s_backup", var.project, var.cluster_region, var.cluster_name)
 
-  bucket_policy_only = true
+  uniform_bucket_level_access = true
 
   location = "EU"
 }
@@ -47,6 +47,10 @@ resource "kubernetes_namespace" "velero" {
     labels = {
       "component" = "velero"
     }
+  }
+
+  timeouts {
+    delete = var.timeout
   }
 }
 

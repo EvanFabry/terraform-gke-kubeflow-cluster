@@ -2,6 +2,10 @@ resource "kubernetes_namespace" "kubeflow" {
   metadata {
     name = "kubeflow"
   }
+
+  timeouts {
+    delete = var.timeout
+  }
 }
 
 resource "kubernetes_namespace" "istio-system" {
@@ -12,6 +16,10 @@ resource "kubernetes_namespace" "istio-system" {
     labels = {
       "istio-injection" = "disabled"
     }
+  }
+
+  timeouts {
+    delete = var.timeout
   }
 }
 

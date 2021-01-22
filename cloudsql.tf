@@ -6,10 +6,11 @@ resource "random_id" "db_name_suffix" {
 
 # A Cloud SQL instance to used for the metadata of pipelines.
 resource "google_sql_database_instance" "metadata_db_instance" {
-  project          = var.project
-  name             = format("%s-%s", var.cluster_name, random_id.db_name_suffix.hex)
-  database_version = "MYSQL_5_7"
-  region           = var.cluster_region
+  project             = var.project
+  name                = format("%s-%s", var.cluster_name, random_id.db_name_suffix.hex)
+  database_version    = "MYSQL_5_7"
+  region              = var.cluster_region
+  deletion_protection = false
 
   settings {
     backup_configuration {
@@ -31,6 +32,12 @@ resource "google_sql_database_instance" "metadata_db_instance" {
     location_preference {
       zone = var.cluster_zone
     }
+  }
+
+  timeouts {
+    create = var.timeout
+    update = var.timeout
+    delete = var.timeout
   }
 }
 

@@ -2,6 +2,25 @@
 # the configured Google account
 data "google_client_config" "default" {}
 
+module "project-services" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "4.0.0"
+
+  project_id = var.project
+
+  activate_apis = [
+    "compute.googleapis.com",
+    "container.googleapis.com",
+    "iam.googleapis.com",
+    "servicemanagement.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "ml.googleapis.com",
+    "meshconfig.googleapis.com",
+  ]
+
+  disable_services_on_destroy = var.disable_googleapi_services_on_destroy
+}
+
 # The GKE cluster. The node pool is managed as a separate resource below.
 resource "google_container_cluster" "kubeflow_cluster" {
   depends_on = [
@@ -48,10 +67,6 @@ resource "google_container_cluster" "kubeflow_cluster" {
 
     http_load_balancing {
       disabled = false
-    }
-
-    kubernetes_dashboard {
-      disabled = true
     }
 
     network_policy_config {
