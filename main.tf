@@ -284,6 +284,8 @@ resource "google_compute_resource_policy" "artifact_store-snapshot-schedule" {
   project  = var.project
   region   = var.cluster_region
 
+  depends_on = [google_compute_disk.artifact_store]
+
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
