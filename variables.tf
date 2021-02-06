@@ -57,7 +57,7 @@ variable "disable_googleapi_services_on_destroy" {
 }
 
 variable "initial_node_count" {
-  default = 3
+  default = 1
 }
 
 variable "main_node_pool_min_nodes" {
@@ -78,7 +78,7 @@ variable "auto_repair" {
 }
 
 variable "auto_upgrade" {
-  default = "false"
+  default = "true"
 }
 
 variable "main_node_pool_machine_type" {
