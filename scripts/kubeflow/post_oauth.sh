@@ -5,6 +5,8 @@ export KF_NAME=${NAME}
 export KF_PROJECT=${PROJECT}
 export KF_DIR=.mlcli/${CLOUD}_${PROJECT}_${KF_NAME}/configuration
 
+echo $(env)
+
 cd "${KF_DIR}"
 
 make set-values

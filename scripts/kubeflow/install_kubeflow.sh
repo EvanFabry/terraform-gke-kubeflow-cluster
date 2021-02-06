@@ -13,27 +13,27 @@ export MGMTCTXT=${MGMT_NAME}
 export MANAGEMENT_CTXT=${MGMTCTXT}
 export USER=$(gcloud config get-value account)
 
-bash setup.sh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 n=0
-retries = 2
+retries=2
 setup_status=1
-until [ "$n" -ge "$retries" ]
+until (( n >= retries ))
 do
-  bash setup.sh && setup_status=0 && break
+  ${DIR}/setup.sh && setup_status=0 && break
   n=$((n+1))
-  if [ "$n" -l "$retries" ]
+  if (( n < retries ))
   then
     echo "Retrying in 60s..." 
     sleep 60
   fi
 done
 
-if [ "$setup_status" -ne "0" ]
+if (( setup_status != 0 ))
 then
   echo "Kubeflow setup failed"
   exit 1
 fi
 
-bash deploy.sh
-bash post_oauth.sh
+${DIR}/deploy.sh
+${DIR}/post_oauth.sh

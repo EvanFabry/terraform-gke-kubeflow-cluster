@@ -23,7 +23,9 @@ make apply-cluster
 make create-context
 make apply-kcc
 
-$$ Authorize Cloud Config Connector for each managed project
+## Authorize Cloud Config Connector for each managed project
 kpt cfg set ./instance managed-project "${MANAGED_PROJECT}"
 gcloud beta anthos apply ./instance/managed-project/iam.yaml
 
+echo "post setup env:"
+echo $(env)

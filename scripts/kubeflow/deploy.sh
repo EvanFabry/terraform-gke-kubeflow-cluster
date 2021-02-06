@@ -5,10 +5,13 @@
 ## Environment Variables 
 export KF_NAME=${NAME}
 export KF_PROJECT=${PROJECT}
-export KF_DIR=.mlcli/gcp_${PROJECT}_${NAME}/configuration
+export MLCLI_DIR=${PWD}/.mlcli
+export KF_DIR=${MLCLI_DIR}/gcp_${PROJECT}_${NAME}/configuration
 export MGMT_NAME=mgmt-${NAME}
 export MGMTCTXT=${MGMT_NAME}
 export MANAGEMENT_CTXT=$MGMTCTXT
+
+echo $(env)
 
 rm -rf ${KF_DIR}
 
