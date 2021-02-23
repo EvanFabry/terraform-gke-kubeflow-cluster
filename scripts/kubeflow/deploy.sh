@@ -34,7 +34,7 @@ kubectl config use-context "${MGMTCTXT}"
 kubectl create namespace "${KF_PROJECT}"
 kubectl config set-context --current --namespace "${KF_PROJECT}"
 
-cd ${KF_DIR}/../..  # install istioctl in .mlcli/
+cd ${MLCLI_DIR}
 curl -LO https://storage.googleapis.com/gke-release/asm/istio-1.4.10-asm.18-osx.tar.gz
 curl -LO https://storage.googleapis.com/gke-release/asm/istio-1.4.10-asm.18-osx.tar.gz.1.sig
 openssl dgst -sha256 -verify /dev/stdin -signature istio-1.4.10-asm.18-osx.tar.gz.1.sig istio-1.4.10-asm.18-osx.tar.gz <<'EOF'
@@ -46,4 +46,4 @@ EOF
 tar xzf istio-1.4.10-asm.18-osx.tar.gz
 
 cd istio-1.4.10-asm.18
-export PATH=$PWD/bin:$PATH
+export PATH=${PWD}/bin:${PATH}

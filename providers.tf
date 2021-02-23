@@ -18,10 +18,7 @@ provider "null" {
 }
 
 provider "kubernetes" {
-  version = "~> 1.13.1"
-
-  # don't load config from ~/.kube/config
-  load_config_file = false
+  version = ">= 2.0.0"
 
   # instead use the cluster managed by this module
   host                   = format("https://%s", local.cluster_endpoint)
